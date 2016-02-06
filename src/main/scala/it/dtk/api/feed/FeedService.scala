@@ -18,9 +18,8 @@ import scala.concurrent.ExecutionContext
   * Created by fabiofumarola on 04/02/16.
   */
 @Api(value = "/feed", produces = "application/json")
-@Path("/feed")
 class FeedService(feedActor: ActorRef)(implicit executionContext: ExecutionContext)
-  extends Directives with Json4sSupport with DefaultJsonFormats {
+  extends Directives with Json4sSupport {
 
   implicit val serialization = jackson.Serialization
   // or native.Serialization
@@ -37,13 +36,14 @@ class FeedService(feedActor: ActorRef)(implicit executionContext: ExecutionConte
     add ~
     del
 
-  @ApiOperation(value = "return the list of the current feeds", notes = "", nickname = "listFeeds", httpMethod = "GET")
+
+  @ApiOperation(value = "return the list of the current feeds parsed by wheretolive", notes = "", nickname = "listFeeds", httpMethod = "GET")
   @ApiResponses(Array(
     new ApiResponse(code = 200, message = "Return Feeds List", response = classOf[List[FeedSource]]),
     new ApiResponse(code = 500, message = "Internal server error")
   ))
   def listFeeds =
-    path("list") {
+    path("feed/list") {
       get {
         complete {
           (feedActor ? ListFeeds).mapTo[List[FeedSource]]
@@ -51,7 +51,7 @@ class FeedService(feedActor: ActorRef)(implicit executionContext: ExecutionConte
       }
     }
 
-  @ApiOperation(value = "add a Feed", notes = "", nickname = "addFeed", httpMethod = "POST")
+  @ApiOperation(value = "add a Feed to be parsed by wheretolive", notes = "", nickname = "addFeed", httpMethod = "POST")
   @ApiImplicitParams(Array(
     new ApiImplicitParam(name = "body", value = " feed to add", required = true,
       dataType = "it.dtk.api.feed.FeedActor$AddFeed", paramType = "body")
@@ -60,7 +60,7 @@ class FeedService(feedActor: ActorRef)(implicit executionContext: ExecutionConte
     new ApiResponse(code = 200, message = "Return a message", response = classOf[String]),
     new ApiResponse(code = 500, message = "Internal server error")
   ))
-  def add = path("add") {
+  def add = path("feed/add") {
     post {
       entity(as[AddFeed]) { request =>
         complete {
@@ -70,7 +70,7 @@ class FeedService(feedActor: ActorRef)(implicit executionContext: ExecutionConte
     }
   }
 
-  @ApiOperation(value = "del a Feed", notes = "", nickname = "delFeed", httpMethod = "POST")
+  @ApiOperation(value = "delete a Feed from wheretolive", notes = "", nickname = "delFeed", httpMethod = "POST")
   @ApiImplicitParams(Array(
     new ApiImplicitParam(name = "body", value = " feed to delete", required = true,
       dataType = "it.dtk.api.feed.FeedActor$DelFeed", paramType = "body")
@@ -79,7 +79,7 @@ class FeedService(feedActor: ActorRef)(implicit executionContext: ExecutionConte
     new ApiResponse(code = 200, message = "Return a message", response = classOf[String]),
     new ApiResponse(code = 500, message = "Internal server error")
   ))
-  def del = path("del") {
+  def del = path("feed/del") {
     post {
       entity(as[DelFeed]) { request =>
         complete {

@@ -1,4 +1,4 @@
-name := "swagger-akka-http-sample"
+name := "wheretolive-api"
 
 scalaVersion := "2.11.7"
 

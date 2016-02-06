@@ -16,7 +16,10 @@ object model {
                         parsedUrls: List[String],
                         lastTime: Option[DateTime],
                         count: Long = 0,
-                        schedulerParams: SchedulerParameters = SchedulerParameters())
+                        schedulerParams: SchedulerParameters = SchedulerParameters()
+                       )
+
+  case class GoogleNews()
 
   case class Article(uri: String,
                      title: String,

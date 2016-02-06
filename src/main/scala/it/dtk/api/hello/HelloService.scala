@@ -21,8 +21,6 @@ class HelloService(hello: ActorRef)(implicit executionContext: ExecutionContext)
   import scala.concurrent.duration._
 
   implicit val timeout = Timeout(2.seconds)
-
-  import spray.json.DefaultJsonProtocol._
   implicit val greetingFormat = jsonFormat1(Greeting)
 
   val route =

@@ -39,14 +39,14 @@ class GoogleNewsService(googleNewsActor: ActorRef)(implicit executionContext: Ex
   @Path("/list")
   @ApiOperation(value = "return the goole-news terms list used by WhereToLSive to extract google's news", notes = "", nickname = "listGoogleTerms", httpMethod = "GET")
   @ApiResponses(Array(
-    new ApiResponse(code = 200, message = "Return Feeds List", response = classOf[List[GoogleNews]]),
+    new ApiResponse(code = 200, message = "Return Feeds List", response = classOf[List[GoogleNewsTerms]]),
     new ApiResponse(code = 500, message = "Internal server error")
   ))
   def listTerms =
     path("google-news"/ "list") {
       get {
         complete {
-          (googleNewsActor ? ListTerms).mapTo[List[GoogleNews]]
+          (googleNewsActor ? ListTerms).mapTo[List[GoogleNewsTerms]]
         }
       }
     }

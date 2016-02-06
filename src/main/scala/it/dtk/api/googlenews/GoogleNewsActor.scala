@@ -9,8 +9,6 @@ import it.dtk.model.Feed
   */
 object GoogleNewsActor {
 
-  case class GoogleNews()
-
   case object ListTerms
 
   case class DelTerms(terms: List[String])

@@ -18,6 +18,7 @@ import scala.concurrent.ExecutionContext
   * Created by fabiofumarola on 04/02/16.
   */
 @Api(value = "/feed", produces = "application/json")
+@Path("/feed")
 class FeedService(feedActor: ActorRef)(implicit executionContext: ExecutionContext)
   extends Directives with Json4sSupport {
 
@@ -43,7 +44,7 @@ class FeedService(feedActor: ActorRef)(implicit executionContext: ExecutionConte
     new ApiResponse(code = 500, message = "Internal server error")
   ))
   def listFeeds =
-    path("feed/list") {
+    path("/list") {
       get {
         complete {
           (feedActor ? ListFeeds).mapTo[List[FeedSource]]
@@ -60,7 +61,7 @@ class FeedService(feedActor: ActorRef)(implicit executionContext: ExecutionConte
     new ApiResponse(code = 200, message = "Return a message", response = classOf[String]),
     new ApiResponse(code = 500, message = "Internal server error")
   ))
-  def add = path("feed/add") {
+  def add = path("/add") {
     post {
       entity(as[AddFeed]) { request =>
         complete {

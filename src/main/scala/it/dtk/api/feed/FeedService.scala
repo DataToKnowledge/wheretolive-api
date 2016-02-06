@@ -6,7 +6,7 @@ import akka.util.Timeout
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport
 import io.swagger.annotations._
 import it.dtk.api.feed.FeedActor._
-import it.dtk.news.model.FeedSource
+import it.dtk.model._
 import org.json4s.{DefaultFormats, jackson}
 import javax.ws.rs.Path
 import scala.concurrent.ExecutionContext
@@ -37,14 +37,14 @@ class FeedService(feedActor: ActorRef)(implicit executionContext: ExecutionConte
   @Path("/list")
   @ApiOperation(value = "return the list of the current feeds parsed by wheretolive", notes = "", nickname = "listFeeds", httpMethod = "GET")
   @ApiResponses(Array(
-    new ApiResponse(code = 200, message = "Return Feeds List", response = classOf[List[FeedSource]]),
+    new ApiResponse(code = 200, message = "Return Feeds List", response = classOf[List[Feed]]),
     new ApiResponse(code = 500, message = "Internal server error")
   ))
   def listFeeds =
-    path("feed"/ "list") {
+    path("feed" / "list") {
       get {
         complete {
-          (feedActor ? ListFeeds).mapTo[List[FeedSource]]
+          (feedActor ? ListFeeds).mapTo[List[Feed]]
         }
       }
     }
@@ -68,6 +68,7 @@ class FeedService(feedActor: ActorRef)(implicit executionContext: ExecutionConte
       }
     }
   }
+
   @Path("/del")
   @ApiOperation(value = "delete a Feed from wheretolive", notes = "", nickname = "delFeed", httpMethod = "POST")
   @ApiImplicitParams(Array(

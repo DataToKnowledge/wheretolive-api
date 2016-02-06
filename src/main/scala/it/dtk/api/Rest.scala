@@ -11,6 +11,7 @@ import com.github.swagger.akka.{HasActorSystem, SwaggerHttpService}
 import it.dtk.api.add.{AddActor, AddService}
 import it.dtk.api.feed.{FeedActor, FeedService}
 import it.dtk.api.hello.{HelloActor, HelloService}
+import akka.http.scaladsl.server.Directives
 
 import scala.reflect.runtime.universe
 import scala.util.{Failure, Success}
@@ -21,7 +22,7 @@ import scala.util.{Failure, Success}
   * Notice that it requires to be mixed in with ``core.CoreActors``, which provides access
   * to the top-level actors that make up the system.
   */
-trait Api extends RouteConcatenation with AkkaHttpCorsSupport {
+trait Api extends RouteConcatenation with AkkaHttpCorsSupport with Directives {
 
   override protected def corsAllowOrigins: List[String] = List("*")
 
@@ -52,12 +53,17 @@ trait Api extends RouteConcatenation with AkkaHttpCorsSupport {
 
   private implicit val _ = system.dispatcher
 
-  val routes = cors {
+  val swaggerUI = path("swagger") {
+    getFromResource("swagger/index.html")
+  } ~ getFromResourceDirectory("swagger")
+
+  val routes =
     new AddService(add).route ~
       new HelloService(hello).route ~
       new FeedService(feed).route ~
-      new SwaggerDocService(system).routes
-  }
+      new SwaggerDocService(system).routes ~
+      swaggerUI
+
 
 }
 

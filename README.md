@@ -54,7 +54,7 @@ It must be used only for dev and not in production!!!.
     sbt
     > ~reStart
     ```
-- to stop the api, press <enter>
+- to stop the api, press enter
     ```bash
     
     > ~reStop

@@ -7,13 +7,10 @@ git clone git@github.com:DataToKnowledge/wheretolive-api.git
 cd wheretolive-api
 ```
 
-**Init the submodules**
-
-You must run two commands: git submodule init to initialize your local configuration file, and git submodule update to fetch all the data from that project and check out the appropriate commit listed in your superprojects.
+**Init dependent projects**
 
 ```bash
-git submodule init
-git submodule update
+./init_subprojects.sh
 ```
 
 ## Development Setup
@@ -50,16 +47,16 @@ It must be used only for dev and not in production!!!.
 
 - to start the api
     ```bash
-    
+
     sbt
     > ~reStart
     ```
 - to stop the api, press enter
     ```bash
-    
+
     > ~reStop
     ```
-    
+
 ## Production Setup
 
 Using [sbt-native-packager](https://github.com/sbt/sbt-native-packager) the project can be packaged in a docker container, pushed on docker-hub and pulled from other vm.

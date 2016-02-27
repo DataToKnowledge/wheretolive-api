@@ -19,6 +19,7 @@ object FeedActor {
 
 class FeedActor extends Actor with ActorLogging {
 
+
   override def receive: Receive = {
     case ListFeeds =>
       sender ! List.empty[Feed]

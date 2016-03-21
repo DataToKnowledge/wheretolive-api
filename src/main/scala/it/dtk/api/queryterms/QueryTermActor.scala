@@ -1,13 +1,13 @@
-package it.dtk.api.googlenews
+package it.dtk.api.queryterms
 
 import akka.actor.{ Actor, ActorLogging }
-import it.dtk.api.googlenews.GoogleNewsActor._
+import it.dtk.api.queryterms.QueryTermActor._
 import it.dtk.model.Feed
 
 /**
  * Created by fabiofumarola on 04/02/16.
  */
-object GoogleNewsActor {
+object QueryTermActor {
 
   case object ListTerms
 
@@ -17,7 +17,7 @@ object GoogleNewsActor {
 
 }
 
-class GoogleNewsActor extends Actor with ActorLogging {
+class QueryTermActor extends Actor with ActorLogging {
 
   override def receive: Receive = {
     case ListTerms =>

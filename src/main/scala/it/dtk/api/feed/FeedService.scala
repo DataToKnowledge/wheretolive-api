@@ -29,7 +29,7 @@ class FeedService(feedActor: ActorRef)(implicit executionContext: ExecutionConte
 
   implicit val timeout = Timeout(2.seconds)
 
-  val route = listFeeds ~
+  val routes = listFeeds ~
     add ~
     del
 

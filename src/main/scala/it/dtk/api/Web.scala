@@ -9,7 +9,8 @@ import akka.stream.ActorMaterializer
 import com.github.swagger.akka.model.Info
 import com.github.swagger.akka.{ HasActorSystem, SwaggerHttpService }
 import it.dtk.api.feed.{ FeedActor, FeedService }
-import it.dtk.api.googlenews.{ GoogleNewsActor, GoogleNewsService }
+import it.dtk.api.queryterms.{ QueryTermActor, QueryTermService }
+import it.dtk.api.search.{ SearchService, SearchActor }
 
 import scala.reflect.runtime.universe
 import scala.util.{ Failure, Success }
@@ -45,8 +46,9 @@ trait Api extends RouteConcatenation with AkkaHttpCorsSupport with Directives {
    */
   sys.addShutdownHook(system.shutdown())
 
-  val googleNews = system.actorOf(Props[GoogleNewsActor])
+  val queryTerms = system.actorOf(Props[QueryTermActor])
   val feed = system.actorOf(Props[FeedActor])
+  val search = system.actorOf(Props[SearchActor])
 
   private implicit val _ = system.dispatcher
 
@@ -55,8 +57,9 @@ trait Api extends RouteConcatenation with AkkaHttpCorsSupport with Directives {
   } ~ getFromResourceDirectory("swagger")
 
   val routes =
-    new GoogleNewsService(googleNews).route ~
-      new FeedService(feed).route ~
+    new QueryTermService(queryTerms).route ~
+      new FeedService(feed).routes ~
+      new SearchService(search).routes ~
       new SwaggerDocService(system).routes ~
       swaggerUI
 
@@ -65,7 +68,11 @@ trait Api extends RouteConcatenation with AkkaHttpCorsSupport with Directives {
 class SwaggerDocService(system: ActorSystem) extends SwaggerHttpService with HasActorSystem {
   override implicit val actorSystem: ActorSystem = system
   override implicit val materializer: ActorMaterializer = ActorMaterializer()
-  override val apiTypes = Seq(universe.typeOf[FeedService], universe.typeOf[GoogleNewsService])
+  override val apiTypes = Seq(
+    universe.typeOf[FeedService],
+    universe.typeOf[QueryTermService],
+    universe.typeOf[SearchService]
+  )
   override val host = "localhost:9000"
   override val info = Info(version = "1.0")
 }

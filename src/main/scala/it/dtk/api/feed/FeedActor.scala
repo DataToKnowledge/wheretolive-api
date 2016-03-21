@@ -1,12 +1,12 @@
 package it.dtk.api.feed
 
-import akka.actor.{ActorLogging, Actor}
-import it.dtk.api.feed.FeedActor.{ListFeeds, AddFeed, DelFeed}
+import akka.actor.{ ActorLogging, Actor }
+import it.dtk.api.feed.FeedActor.{ ListFeeds, AddFeed, DelFeed }
 import it.dtk.model._
 
 /**
-  * Created by fabiofumarola on 04/02/16.
-  */
+ * Created by fabiofumarola on 04/02/16.
+ */
 object FeedActor {
 
   case object ListFeeds
@@ -18,7 +18,6 @@ object FeedActor {
 }
 
 class FeedActor extends Actor with ActorLogging {
-
 
   override def receive: Receive = {
     case ListFeeds =>

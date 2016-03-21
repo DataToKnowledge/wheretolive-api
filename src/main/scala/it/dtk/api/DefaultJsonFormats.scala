@@ -26,7 +26,7 @@ trait DefaultJsonFormats extends DefaultJsonProtocol with SprayJsonSupport {
   /**
    * Computes ``RootJsonFormat`` for type ``A`` if ``A`` is object
    */
-  def jsonObjectFormat[A : ClassTag]: RootJsonFormat[A] = new RootJsonFormat[A] {
+  def jsonObjectFormat[A: ClassTag]: RootJsonFormat[A] = new RootJsonFormat[A] {
     val ct = implicitly[ClassTag[A]]
     def write(obj: A): JsValue = JsObject("value" -> JsString(ct.runtimeClass.getSimpleName))
     def read(json: JsValue): A = ct.runtimeClass.newInstance().asInstanceOf[A]
@@ -39,7 +39,7 @@ trait DefaultJsonFormats extends DefaultJsonProtocol with SprayJsonSupport {
     def write(x: UUID) = JsString(x.toString)
     def read(value: JsValue) = value match {
       case JsString(x) => UUID.fromString(x)
-      case x           => deserializationError("Expected UUID as JsString, but got " + x)
+      case x => deserializationError("Expected UUID as JsString, but got " + x)
     }
   }
 

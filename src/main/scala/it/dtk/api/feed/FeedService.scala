@@ -7,26 +7,27 @@ import de.heikoseeberger.akkahttpjson4s.Json4sSupport
 import io.swagger.annotations._
 import it.dtk.api.feed.FeedActor._
 import it.dtk.model._
-import org.json4s.{DefaultFormats, jackson}
+import org.json4s.ext.JodaTimeSerializers
+import org.json4s.jackson.Serialization
+import org.json4s.{ NoTypeHints, DefaultFormats, jackson }
 import javax.ws.rs.Path
 import scala.concurrent.ExecutionContext
 
 /**
-  * Created by fabiofumarola on 04/02/16.
-  */
+ * Created by fabiofumarola on 04/02/16.
+ */
 @Api(value = "/feed", produces = "application/json")
 @Path("/feed")
 class FeedService(feedActor: ActorRef)(implicit executionContext: ExecutionContext)
-  extends Directives with Json4sSupport {
+    extends Directives with Json4sSupport {
 
   implicit val serialization = jackson.Serialization
-  implicit val formats = DefaultFormats
+  implicit val formats = Serialization.formats(NoTypeHints) ++ JodaTimeSerializers.all
 
   import akka.pattern.ask
   import scala.concurrent.duration._
 
   implicit val timeout = Timeout(2.seconds)
-
 
   val route = listFeeds ~
     add ~

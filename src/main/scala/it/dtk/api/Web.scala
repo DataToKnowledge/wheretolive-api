@@ -1,25 +1,25 @@
 package it.dtk.api
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{ ActorSystem, Props }
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpHeader
-import akka.http.scaladsl.model.headers.{`Access-Control-Allow-Credentials`, `Access-Control-Allow-Headers`, `Access-Control-Max-Age`}
-import akka.http.scaladsl.server.{Directives, RouteConcatenation}
+import akka.http.scaladsl.model.headers.{ `Access-Control-Allow-Credentials`, `Access-Control-Allow-Headers`, `Access-Control-Max-Age` }
+import akka.http.scaladsl.server.{ Directives, RouteConcatenation }
 import akka.stream.ActorMaterializer
 import com.github.swagger.akka.model.Info
-import com.github.swagger.akka.{HasActorSystem, SwaggerHttpService}
-import it.dtk.api.feed.{FeedActor, FeedService}
-import it.dtk.api.googlenews.{GoogleNewsActor, GoogleNewsService}
+import com.github.swagger.akka.{ HasActorSystem, SwaggerHttpService }
+import it.dtk.api.feed.{ FeedActor, FeedService }
+import it.dtk.api.googlenews.{ GoogleNewsActor, GoogleNewsService }
 
 import scala.reflect.runtime.universe
-import scala.util.{Failure, Success}
+import scala.util.{ Failure, Success }
 
 /**
-  * The REST API layer. It exposes the REST services, but does not provide any
-  * web server interface.<br/>
-  * Notice that it requires to be mixed in with ``core.CoreActors``, which provides access
-  * to the top-level actors that make up the system.
-  */
+ * The REST API layer. It exposes the REST services, but does not provide any
+ * web server interface.<br/>
+ * Notice that it requires to be mixed in with ``core.CoreActors``, which provides access
+ * to the top-level actors that make up the system.
+ */
 trait Api extends RouteConcatenation with AkkaHttpCorsSupport with Directives {
 
   override protected def corsAllowOrigins: List[String] = List("*")
@@ -36,13 +36,13 @@ trait Api extends RouteConcatenation with AkkaHttpCorsSupport with Directives {
     List("Origin", "X-Requested-With", "Content-Type", "Accept", "Accept-Encoding", "Accept-Language", "Host", "Referer", "User-Agent")
 
   /**
-    * Construct the ActorSystem we will use in our application
-    */
+   * Construct the ActorSystem we will use in our application
+   */
   implicit lazy val system = ActorSystem("akka-http")
 
   /**
-    * Ensure that the constructed ActorSystem is shut down when the JVM shuts down
-    */
+   * Ensure that the constructed ActorSystem is shut down when the JVM shuts down
+   */
   sys.addShutdownHook(system.shutdown())
 
   val googleNews = system.actorOf(Props[GoogleNewsActor])
@@ -50,17 +50,15 @@ trait Api extends RouteConcatenation with AkkaHttpCorsSupport with Directives {
 
   private implicit val _ = system.dispatcher
 
-
   val swaggerUI = path("swagger") {
     getFromResource("swagger/index.html")
   } ~ getFromResourceDirectory("swagger")
 
   val routes =
-      new GoogleNewsService(googleNews).route ~
+    new GoogleNewsService(googleNews).route ~
       new FeedService(feed).route ~
       new SwaggerDocService(system).routes ~
       swaggerUI
-
 
 }
 
@@ -73,7 +71,6 @@ class SwaggerDocService(system: ActorSystem) extends SwaggerHttpService with Has
 }
 
 object Web extends App with Api {
-
 
   implicit val materializer = ActorMaterializer()
   implicit val executor = materializer.executionContext

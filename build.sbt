@@ -1,3 +1,5 @@
+import com.typesafe.sbt.SbtScalariform
+
 lazy val commons = Seq(
   organization := "it.datatoknowledge",
   version := "0.1.0",
@@ -15,15 +17,16 @@ lazy val commons = Seq(
 )
 
 lazy val root = (project in file("."))
+  .enablePlugins(SbtScalariform, DockerPlugin, JavaAppPackaging)
   .settings(commons: _*)
   .settings(
     name := "wheretolive-api",
     libraryDependencies ++= Seq(
+      "com.typesafe.akka" %% "akka-http-core" % "2.4.2",
       "com.github.swagger-akka-http" %% "swagger-akka-http" % "0.6.2",
       "org.slf4j" % "slf4j-simple" % "1.7.14",
       "de.heikoseeberger" %% "akka-http-json4s" % "1.5.0"
-    ),
-    defaultScalariformSettings
+    )
   ) dependsOn algocore
 
 lazy val algocore = (project in file("./algocore"))
@@ -34,8 +37,6 @@ Revolver.settings
 fork in Test := true
 fork := true
 
-enablePlugins(JavaAppPackaging)
-enablePlugins(DockerPlugin)
 
 maintainer in Docker := "info@datatotknowledge.it"
 version in Docker := version.value

@@ -1,12 +1,12 @@
 package it.dtk.api.googlenews
 
-import akka.actor.{Actor, ActorLogging}
+import akka.actor.{ Actor, ActorLogging }
 import it.dtk.api.googlenews.GoogleNewsActor._
 import it.dtk.model.Feed
 
 /**
-  * Created by fabiofumarola on 04/02/16.
-  */
+ * Created by fabiofumarola on 04/02/16.
+ */
 object GoogleNewsActor {
 
   case object ListTerms

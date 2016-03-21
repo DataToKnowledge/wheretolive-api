@@ -9,17 +9,17 @@ import de.heikoseeberger.akkahttpjson4s.Json4sSupport
 import io.swagger.annotations._
 import it.dtk.api.googlenews.GoogleNewsActor._
 import it.dtk.model._
-import org.json4s.{DefaultFormats, jackson}
+import org.json4s.{ DefaultFormats, jackson }
 
 import scala.concurrent.ExecutionContext
 
 /**
-  * Created by fabiofumarola on 04/02/16.
-  */
+ * Created by fabiofumarola on 04/02/16.
+ */
 @Api(value = "/google-news", produces = "application/json")
 @Path("/google-news")
 class GoogleNewsService(googleNewsActor: ActorRef)(implicit executionContext: ExecutionContext)
-  extends Directives with Json4sSupport {
+    extends Directives with Json4sSupport {
 
   implicit val serialization = jackson.Serialization
   // or native.Serialization
@@ -31,7 +31,6 @@ class GoogleNewsService(googleNewsActor: ActorRef)(implicit executionContext: Ex
 
   implicit val timeout = Timeout(2.seconds)
 
-
   val route = listTerms ~
     add ~
     del
@@ -39,14 +38,14 @@ class GoogleNewsService(googleNewsActor: ActorRef)(implicit executionContext: Ex
   @Path("/list")
   @ApiOperation(value = "return the goole-news terms list used by WhereToLSive to extract google's news", notes = "", nickname = "listGoogleTerms", httpMethod = "GET")
   @ApiResponses(Array(
-    new ApiResponse(code = 200, message = "Return Feeds List", response = classOf[List[GoogleNewsTerms]]),
+    new ApiResponse(code = 200, message = "Return Feeds List", response = classOf[List[QueryTerm]]),
     new ApiResponse(code = 500, message = "Internal server error")
   ))
   def listTerms =
-    path("google-news"/ "list") {
+    path("google-news" / "list") {
       get {
         complete {
-          (googleNewsActor ? ListTerms).mapTo[List[GoogleNewsTerms]]
+          (googleNewsActor ? ListTerms).mapTo[List[QueryTerm]]
         }
       }
     }
@@ -70,6 +69,7 @@ class GoogleNewsService(googleNewsActor: ActorRef)(implicit executionContext: Ex
       }
     }
   }
+
   @Path("/del")
   @ApiOperation(value = "delete existing terms in the google-news' terms list used by WhereToLive to extract google's news", notes = "", nickname = "delGoogleTerms", httpMethod = "POST")
   @ApiImplicitParams(Array(

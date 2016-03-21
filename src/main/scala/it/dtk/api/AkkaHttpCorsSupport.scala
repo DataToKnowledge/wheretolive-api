@@ -1,6 +1,5 @@
 package it.dtk.api
 
-
 import akka.http.scaladsl.model.HttpHeader
 import akka.http.scaladsl.model.HttpMethods._
 import akka.http.scaladsl.model.HttpResponse
@@ -25,13 +24,13 @@ trait AkkaHttpCorsSupport {
 
   protected def corsRejectionHandler(allowOrigin: `Access-Control-Allow-Origin`) = RejectionHandler
     .newBuilder().handle {
-    case MethodRejection(supported) =>
-      complete(HttpResponse().withHeaders(
-        `Access-Control-Allow-Methods`(OPTIONS, supported) ::
-          allowOrigin ::
-          optionsCorsHeaders
-      ))
-  }
+      case MethodRejection(supported) =>
+        complete(HttpResponse().withHeaders(
+          `Access-Control-Allow-Methods`(OPTIONS, supported) ::
+            allowOrigin ::
+            optionsCorsHeaders
+        ))
+    }
     .result()
 
   private def originToAllowOrigin(origin: Origin): Option[`Access-Control-Allow-Origin`] =
@@ -55,6 +54,6 @@ trait AkkaHttpCorsSupport {
 
       case (_, _) =>
         route
-    }) (context)
+    })(context)
   }
 }

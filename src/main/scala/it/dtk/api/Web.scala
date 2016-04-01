@@ -41,6 +41,8 @@ trait Api extends RouteConcatenation with AkkaHttpCorsSupport with Directives {
    */
   implicit lazy val system = ActorSystem("akka-http")
 
+  def confFile: String
+
   /**
    * Ensure that the constructed ActorSystem is shut down when the JVM shuts down
    */
@@ -48,7 +50,7 @@ trait Api extends RouteConcatenation with AkkaHttpCorsSupport with Directives {
 
   val queryTerms = system.actorOf(Props[QueryTermActor])
   val feed = system.actorOf(Props[FeedActor])
-  val search = system.actorOf(Props[SearchActor])
+  val search = system.actorOf(Props(new SearchActor(confFile)))
 
   private implicit val _ = system.dispatcher
 
@@ -81,6 +83,7 @@ object Web extends App with Api {
 
   implicit val materializer = ActorMaterializer()
   implicit val executor = materializer.executionContext
+  override def confFile = "docker_prod.conf"
 
   val host = "0.0.0.0"
   val port = 9000

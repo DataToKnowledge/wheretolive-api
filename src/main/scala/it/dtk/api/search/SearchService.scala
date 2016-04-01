@@ -8,6 +8,7 @@ import akka.util.Timeout
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport
 import io.swagger.annotations._
 import it.dtk.api.search.SearchActor.Search
+import org.json4s.JsonAST.JValue
 import org.json4s.ext.JodaTimeSerializers
 import org.json4s.jackson.Serialization
 import org.json4s.{ NoTypeHints, DefaultFormats, jackson }
@@ -29,7 +30,7 @@ class SearchService(searchActor: ActorRef)(implicit executionContext: ExecutionC
 
   import scala.concurrent.duration._
 
-  implicit val timeout = Timeout(20.seconds)
+  implicit val timeout = Timeout(5.seconds)
 
   val routes = search
 
@@ -47,7 +48,7 @@ class SearchService(searchActor: ActorRef)(implicit executionContext: ExecutionC
     post {
       entity(as[Search]) { request =>
         complete {
-          (searchActor ? request).mapTo[String]
+          (searchActor ? request).mapTo[JValue]
         }
       }
     }

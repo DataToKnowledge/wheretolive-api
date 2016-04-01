@@ -2,8 +2,8 @@ import com.typesafe.sbt.SbtScalariform
 
 lazy val commons = Seq(
   organization := "it.datatoknowledge",
-  version := "0.1.0",
-  scalaVersion := "2.11.7",
+  version := "0.5.0",
+  scalaVersion := "2.11.8",
   scalacOptions ++= Seq("-target:jvm-1.7", "-feature"),
   resolvers ++= Seq(
     "spray repo" at "http://repo.spray.io",

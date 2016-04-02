@@ -31,7 +31,7 @@ class SearchService(searchActor: ActorRef)(implicit executionContext: ExecutionC
 
   import scala.concurrent.duration._
 
-  implicit val timeout = Timeout(5.seconds)
+  implicit val timeout = Timeout(15.seconds)
 
   val routes = search
 

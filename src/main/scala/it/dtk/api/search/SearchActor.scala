@@ -4,13 +4,13 @@ import akka.actor.{ ActorLogging, Actor }
 import com.typesafe.config.ConfigFactory
 import it.dtk.es.ElasticArticles
 import net.ceedubs.ficus.Ficus._
-
+import org.json4s._
+import org.json4s.JsonDSL._
+import org.json4s.jackson.JsonMethods._
 import scala.util.{ Failure, Success }
 
 object SearchActor {
-
-  case class Search(query: String)
-
+  case class Search(query: JValue)
 }
 
 /**
@@ -36,7 +36,9 @@ class SearchActor(configFile: String) extends Actor with ActorLogging {
 
       service.rawQuery(query) onComplete {
         case Success(res) => send ! res
-        case Failure(ex) => send ! s"{ 'error': '${ex.getLocalizedMessage}'"
+        case Failure(ex) =>
+          send ! render("error" -> ex.getLocalizedMessage)
+
       }
   }
 }

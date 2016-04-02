@@ -21,7 +21,8 @@ object Web extends App with RouteConcatenation with Directives {
   implicit val executor = system.dispatcher
   sys.addShutdownHook(system.terminate())
 
-  val confFile = "docker_prod.conf"
+  //  val confFile = "docker_prod.conf"
+  val confFile = "mac_dev.conf"
   val host = "0.0.0.0"
   val port = 9000
 

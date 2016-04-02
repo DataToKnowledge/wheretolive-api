@@ -10,7 +10,7 @@ import org.json4s.jackson.JsonMethods._
 import scala.util.{ Failure, Success }
 
 object SearchActor {
-  case class Search(query: JValue)
+  case class Search(request: JValue)
 }
 
 /**

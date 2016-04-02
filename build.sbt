@@ -25,7 +25,7 @@ lazy val root = (project in file("."))
       "com.typesafe.akka" %% "akka-http-core" % "2.4.2",
       "com.github.swagger-akka-http" %% "swagger-akka-http" % "0.6.2",
       "org.slf4j" % "slf4j-simple" % "1.7.14",
-      "de.heikoseeberger" %% "akka-http-json4s" % "1.5.0"
+      "de.heikoseeberger" %% "akka-http-json4s" % "1.5.3"
     )
   ) dependsOn algocore
 

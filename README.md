@@ -61,3 +61,10 @@ It must be used only for dev and not in production!!!.
 
 Using [sbt-native-packager](https://github.com/sbt/sbt-native-packager) the project can be packaged in a docker container, pushed on docker-hub and pulled from other vm.
 The project is already configured, please read the official documentation if you want to change something.
+Otherwise, run the following command:
+
+```bash
+
+docker run -dt --name wtl-api --restart on-failure data2knowledge/wheretolive-api:0.5.0 
+
+```

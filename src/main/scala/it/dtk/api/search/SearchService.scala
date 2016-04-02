@@ -3,16 +3,16 @@ package it.dtk.api.search
 import javax.ws.rs.Path
 
 import akka.actor.ActorRef
-import akka.http.scaladsl.server.{ Route, Directives }
+import akka.http.scaladsl.server.{ Directives, Route }
 import akka.util.Timeout
-import ch.megard.akka.http.cors.CorsDirectives
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport
 import io.swagger.annotations._
+import it.dtk.api.CorsSupport
 import it.dtk.api.search.SearchActor.Search
 import org.json4s.JsonAST.JValue
 import org.json4s.ext.JodaTimeSerializers
 import org.json4s.jackson.Serialization
-import org.json4s.{ NoTypeHints, DefaultFormats, jackson }
+import org.json4s.{ NoTypeHints, jackson }
 
 import scala.concurrent.ExecutionContext
 
@@ -22,7 +22,7 @@ import scala.concurrent.ExecutionContext
 @Api(value = "/search", produces = "application/json")
 @Path("/search")
 class SearchService(searchActor: ActorRef)(implicit executionContext: ExecutionContext)
-    extends Directives with Json4sSupport with CorsDirectives {
+    extends Directives with Json4sSupport with CorsSupport {
 
   implicit val serialization = jackson.Serialization
   implicit val formats = Serialization.formats(NoTypeHints) ++ JodaTimeSerializers.all
@@ -45,15 +45,17 @@ class SearchService(searchActor: ActorRef)(implicit executionContext: ExecutionC
     new ApiResponse(code = 200, message = "Return a message", response = classOf[String]),
     new ApiResponse(code = 500, message = "Internal server error")
   ))
-  def search: Route = path("search" / "search") {
-    post {
-      entity(as[Search]) { request =>
-        cors()
-        complete {
-          (searchActor ? request).mapTo[JValue]
+  def search: Route =
+    corsHandler {
+      path("search" / "search") {
+        post {
+          entity(as[Search]) { request =>
+            complete {
+              (searchActor ? request).mapTo[JValue]
+            }
+          }
         }
       }
     }
-  }
 
 }

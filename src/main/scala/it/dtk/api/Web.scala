@@ -2,7 +2,7 @@ package it.dtk.api
 
 import akka.actor.{ ActorSystem, Props }
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.server.{ Directives, RouteConcatenation }
+import akka.http.scaladsl.server.{ Route, Directives, RouteConcatenation }
 import akka.stream.ActorMaterializer
 import com.github.swagger.akka.model.Info
 import com.github.swagger.akka.{ HasActorSystem, SwaggerHttpService }
@@ -34,7 +34,7 @@ object Web extends App with RouteConcatenation with Directives {
     getFromResource("swagger/index.html")
   } ~ getFromResourceDirectory("swagger")
 
-  val routes =
+  val routes: Route =
     new QueryTermService(queryTerms).route ~
       new FeedService(feed).routes ~
       new SearchService(search).routes ~

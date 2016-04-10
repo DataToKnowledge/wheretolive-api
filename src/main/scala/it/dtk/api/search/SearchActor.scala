@@ -10,7 +10,9 @@ import org.json4s.jackson.JsonMethods._
 import scala.util.{ Failure, Success }
 
 object SearchActor {
+
   case class Search(request: JValue)
+
 }
 
 /**
@@ -25,12 +27,14 @@ class SearchActor(configFile: String) extends Actor with ActorLogging {
   val config = ConfigFactory.load(configFile).getConfig("reactive_wtl")
 
   val esHosts = config.as[String]("elastic.hosts")
+  val searchHost = config.as[String]("elastic.searchHost")
   val indexPath = config.as[String]("elastic.docs.articles")
   val clusterName = config.as[String]("elastic.clusterName")
 
-  val service = new ElasticArticles(esHosts, indexPath, clusterName)
+  val service = new ElasticArticles(esHosts, searchHost, indexPath, clusterName)
 
   override def receive: Receive = {
+
     case Search(query) =>
       val send = sender
 
@@ -38,7 +42,6 @@ class SearchActor(configFile: String) extends Actor with ActorLogging {
         case Success(res) => send ! res
         case Failure(ex) =>
           send ! render("error" -> ex.getLocalizedMessage)
-
       }
   }
 }

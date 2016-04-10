@@ -19,7 +19,7 @@ object Web extends App with RouteConcatenation with Directives {
   implicit val system = ActorSystem("akka-http")
   implicit val materializer = ActorMaterializer()
   implicit val executor = system.dispatcher
-  sys.addShutdownHook(system.terminate())
+  //  sys.addShutdownHook(system.terminate())
 
   val confFile = "docker_prod.conf"
   //  val confFile = "mac_dev.conf"
@@ -59,8 +59,7 @@ class SwaggerDocService(system: ActorSystem) extends SwaggerHttpService with Has
   override val apiTypes = Seq(
     universe.typeOf[FeedService],
     universe.typeOf[QueryTermService],
-    universe.typeOf[SearchService]
-  )
+    universe.typeOf[SearchService])
   override val host = "api.datatoknowledge.it"
   override val info = Info(version = "1.0")
 }

@@ -2,7 +2,7 @@ import com.typesafe.sbt.SbtScalariform
 
 lazy val commons = Seq(
   organization := "it.datatoknowledge",
-  version := "0.5.6",
+  version := "0.5.7",
   scalaVersion := "2.11.8",
   scalacOptions ++= Seq("-target:jvm-1.7", "-feature"),
   resolvers ++= Seq(
@@ -22,7 +22,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "wheretolive-api",
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-http-core" % "2.4.2",
+      "com.typesafe.akka" %% "akka-http-core" % "2.4.3",
       "com.github.swagger-akka-http" %% "swagger-akka-http" % "0.6.2",
 //      "org.slf4j" % "slf4j-simple" % "1.7.14",
       "de.heikoseeberger" %% "akka-http-json4s" % "1.5.3",

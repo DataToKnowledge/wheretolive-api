@@ -1,18 +1,18 @@
 package it.dtk.api
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{ ActorSystem, Props }
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.server.{Route, Directives, RouteConcatenation}
+import akka.http.scaladsl.server.{ Route, Directives, RouteConcatenation }
 import akka.stream.ActorMaterializer
 import com.github.swagger.akka.model.Info
-import com.github.swagger.akka.{HasActorSystem, SwaggerHttpService}
-import it.dtk.api.feed.{FeedActor, FeedService}
-import it.dtk.api.queryterms.{QueryTermActor, QueryTermService}
-import it.dtk.api.search.{SearchActor, SearchService}
+import com.github.swagger.akka.{ HasActorSystem, SwaggerHttpService }
+import it.dtk.api.feed.{ FeedActor, FeedService }
+import it.dtk.api.queryterms.{ QueryTermActor, QueryTermService }
+import it.dtk.api.search.{ SearchActor, SearchService }
 import ch.megard.akka.http.cors._
 
 import scala.reflect.runtime.universe
-import scala.util.{Failure, Success}
+import scala.util.{ Failure, Success }
 
 object Web extends App with RouteConcatenation with Directives {
 
@@ -61,6 +61,7 @@ class SwaggerDocService(system: ActorSystem) extends SwaggerHttpService with Has
     universe.typeOf[QueryTermService],
     universe.typeOf[SearchService]
   )
+  //  override val host = "localhost:9000"
   override val host = "api.datatoknowledge.it"
   override val info = Info(version = "1.0")
 }

@@ -12,6 +12,7 @@ import scala.util.{ Failure, Success }
 object SearchActor {
 
   case class Search(request: JValue)
+  type Query = JValue
 
 }
 
@@ -37,7 +38,16 @@ class SearchActor(configFile: String) extends Actor with ActorLogging {
 
     case Search(query) =>
       val send = sender
+      log.debug("got query request")
+      service.rawQuery(query) onComplete {
+        case Success(res) => send ! res
+        case Failure(ex) =>
+          send ! render("error" -> ex.getLocalizedMessage)
+      }
 
+    case query: Query =>
+      val send = sender
+      log.debug("got query request")
       service.rawQuery(query) onComplete {
         case Success(res) => send ! res
         case Failure(ex) =>

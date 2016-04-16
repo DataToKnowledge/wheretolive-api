@@ -21,8 +21,8 @@ object Web extends App with RouteConcatenation with Directives {
   implicit val executor = system.dispatcher
   //  sys.addShutdownHook(system.terminate())
 
-  val confFile = "docker_prod.conf"
-  //  val confFile = "mac_dev.conf"
+  //  val confFile = "docker_prod.conf"
+  val confFile = "mac_dev.conf"
   val host = "0.0.0.0"
   val port = 9000
 
@@ -59,7 +59,8 @@ class SwaggerDocService(system: ActorSystem) extends SwaggerHttpService with Has
   override val apiTypes = Seq(
     universe.typeOf[FeedService],
     universe.typeOf[QueryTermService],
-    universe.typeOf[SearchService])
+    universe.typeOf[SearchService]
+  )
   override val host = "api.datatoknowledge.it"
   override val info = Info(version = "1.0")
 }

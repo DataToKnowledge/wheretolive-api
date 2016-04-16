@@ -31,9 +31,9 @@ class SearchService(searchActor: ActorRef)(implicit executionContext: ExecutionC
 
   import scala.concurrent.duration._
 
-  implicit val timeout = Timeout(15.seconds)
+  implicit val timeout = Timeout(10.seconds)
 
-  val routes = search
+  val routes = search ~ searchArticles
 
   @Path("/search")
   @ApiOperation(value = "search endpoint", notes = "", nickname = "search", httpMethod = "POST")
@@ -42,7 +42,7 @@ class SearchService(searchActor: ActorRef)(implicit executionContext: ExecutionC
       dataType = "it.dtk.api.search.SearchActor$Search", paramType = "body")
   ))
   @ApiResponses(Array(
-    new ApiResponse(code = 200, message = "Return a message", response = classOf[String]),
+    new ApiResponse(code = 200, message = "Return a result response", response = classOf[String]),
     new ApiResponse(code = 500, message = "Internal server error")
   ))
   def search: Route =
@@ -58,4 +58,26 @@ class SearchService(searchActor: ActorRef)(implicit executionContext: ExecutionC
       }
     }
 
+  @Path("/_search")
+  @ApiOperation(value = "search endpoint", notes = "", nickname = "search", httpMethod = "POST")
+  @ApiImplicitParams(Array(
+    new ApiImplicitParam(name = "body", value = "{}", required = true,
+      dataType = "String", paramType = "body")
+  ))
+  @ApiResponses(Array(
+    new ApiResponse(code = 200, message = "Return a message", response = classOf[String]),
+    new ApiResponse(code = 500, message = "Internal server error")
+  ))
+  def searchArticles: Route =
+    corsHandler {
+      path("search" / "_search") {
+        post {
+          entity(as[JValue]) { request =>
+            complete {
+              (searchActor ? request).mapTo[JValue]
+            }
+          }
+        }
+      }
+    }
 }

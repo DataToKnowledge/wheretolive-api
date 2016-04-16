@@ -65,6 +65,6 @@ Otherwise, run the following command:
 
 ```bash
 
-docker run -dt --name wtl-api --restart on-failure data2knowledge/wheretolive-api:0.5.5 
+docker run -dt --name wtl-api --restart on-failure data2knowledge/wheretolive-api:0.5.6 
 
 ```

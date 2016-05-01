@@ -38,19 +38,21 @@ class SearchActor(configFile: String) extends Actor with ActorLogging {
 
     case Search(query) =>
       val send = sender
-      log.debug("got query request")
+      log.debug("processing query {}", query)
       service.rawQuery(query) onComplete {
         case Success(res) => send ! res
         case Failure(ex) =>
+          log.error(ex, "error")
           send ! render("error" -> ex.getLocalizedMessage)
       }
 
     case query: Query =>
       val send = sender
-      log.debug("got query request")
+      log.debug("processing query {}", query)
       service.rawQuery(query) onComplete {
         case Success(res) => send ! res
         case Failure(ex) =>
+          log.error(ex, "error")
           send ! render("error" -> ex.getLocalizedMessage)
       }
   }

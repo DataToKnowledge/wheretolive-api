@@ -64,9 +64,5 @@ The project is already configured, please read the official documentation if you
 Otherwise, run the following command:
 
 ```bash
-To News
-docker rm -f wtl-api && docker run -dt --name wtl-api --restart on-failure data2knowledge/wheretolive-api:0.6.0
-
-To News1
-docker rm -f wtl-api && docker run -dt --name wtl-api --restart on-failure data2knowledge/wheretolive-api:0.6.1 
+docker rm -f wtl-api && docker run -dt --name wtl-api --restart on-failure data2knowledge/wheretolive-api:0.6.2
 ```

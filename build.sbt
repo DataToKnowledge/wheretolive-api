@@ -2,7 +2,7 @@ import com.typesafe.sbt.SbtScalariform
 
 lazy val commons = Seq(
   organization := "it.datatoknowledge",
-  version := "0.6.3",
+  version := "0.7.0",
   scalaVersion := "2.11.8",
   scalacOptions ++= Seq("-target:jvm-1.8", "-feature"),
   resolvers ++= Seq(

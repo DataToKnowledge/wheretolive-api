@@ -8,10 +8,7 @@ services:
       - elastic2
     ports:
       - 9000:9000
-#    volumes:
-#      - /Users/fabiofumarola/articles:/opt/docker/backup
-#      - /home/kdde:/opt/docker/backup
-#    command: "-e prod_single -j LoadArticles"
+
 
 networks:
   default:

@@ -1,6 +1,6 @@
 version: '3'
 services:
-  load_articles:
+  api:
     image: data2knowledge/wheretolive-api:0.7.0
     container_name: load_articles
     external_links:
